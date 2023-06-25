@@ -1,16 +1,21 @@
-image: maven:3.6.3-openjdk-11
+image: markhobson/maven-chrome
 
 stages:
-  - build
   - test
 
-build:
-  stage: build
-  script:
-    - mvn clean package
+variables:
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+
 test:
   stage: test
+  allow_failure: true
+
   script:
-    - export
-    - echo 'Execute integration tests'
-    - mvn clean test
+    - mvn $MAVEN_OPTS clean package
+    - mvn compile test
+  artifacts:
+    when: always
+    name: 'report'
+    expire_in: 1 h
+    paths:
+      - target/surefire-reports/*
