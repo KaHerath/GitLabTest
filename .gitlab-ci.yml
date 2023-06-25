@@ -1,0 +1,16 @@
+image: maven:3.6.3-openjdk-11
+
+stages:
+  - build
+  - test
+
+build:
+  stage: build
+  script:
+    - mvn clean package
+test:
+  stage: test
+  script:
+    - export
+    - echo 'Execute integration tests'
+    - mvn clean test
